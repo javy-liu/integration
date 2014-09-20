@@ -11,7 +11,12 @@ usage()
     echo "Usage: `basename $0` [-options]"
     echo "[-options]:"
     echo "-h		help info."
-    echo "-h		help info."
+    echo "-r		use redis, if arg is none use default port 6379."
+    echo "-m		use mysql, if arg is none use default port 3306.root password is root,you can use [--mysql-root] to change it"
+    echo "-t		use tomcat, if arg is none use default port 8080,admin password is tomcat."
+    echo "-n		use nginx, if arg is none use default port 80."
+    echo "--redis-pass		set redis password."
+    echo "--mysql-root		set mysql root password."
 
     exit 1
 }
@@ -35,6 +40,39 @@ redis()
     
 }
 
+mysql()
+{
+    echo "mysql"
+    if [ -z "$1" ] ; then 
+    	echo "$1"
+	else
+		echo "使用 mysql"
+	fi
+    
+}
+
+tomcat()
+{
+    echo "tomcat"
+    if [ -z "$1" ] ; then 
+    	echo "$1"
+	else
+		echo "使用 tomcat"
+	fi
+    
+}
+
+nginx()
+{
+    echo "nginx"
+    if [ -z "$1" ] ; then 
+    	echo "$1"
+	else
+		echo "使用 nginx"
+	fi
+    
+}
+
 # Note the quotes around `$TEMP': they are essential!
 #set 会重新排列参数的顺序，也就是改变$1,$2...$n的值，这些值在getopt中重新排列过了
 eval set -- "$TEMP"
@@ -43,9 +81,9 @@ eval set -- "$TEMP"
 while true ; do
     case "$1" in
             -r) echo redis "$2"; shift ;;
-            -m) echo "config mysql-port $2" ; shift ;;
-            -t) echo "config tomcat-port $2" ; shift ;;
-            -n) echo "config nginx-port $2" ; shift ;;
+            -m) echo mysql "$2" ; shift ;;
+            -t) echo mysql "$2" ; shift ;;
+            -n) echo mysql "$2" ; shift ;;
             --redis-pass) echo "config nginx-port $2" ; shift ;;
             --mysql-root) echo "config nginx-port $2" ; shift ;;
             --) shift ; break ;;
