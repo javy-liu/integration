@@ -8,8 +8,6 @@ MAINTAINER lzy7750015@gmail.com
 
 # Set environment variables.
 ENV HOME /root
-ENV TOMCAT_MAJOR_VERSION 8
-ENV TOMCAT_MINOR_VERSION 8.0.12
 ENV CATALINA_HOME /usr/local/tomcat
 
 # Upadte base image
@@ -68,17 +66,6 @@ VOLUME ["/usr/local/tomcat/webapps"]
 # Define mountable directories.
 VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
 
-# Jenkins
-RUN \
-  wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | sudo apt-key add - && \
-  deb http://pkg.jenkins-ci.org/debian binary/ && \
-  apt-get update &&
-  DEBIAN_FRONTEND=noninteractive apt-get install -y jenkins
-
-# Clean
-RUN \
-  rm -rf /var/lib/apt/lists/*
-
 ADD ./start.sh /start.sh
 RUN chmod 755 /start.sh
 
@@ -95,7 +82,3 @@ WORKDIR /etc/nginx
 
 # Define default command.
 CMD ["/start.sh"]
-
-# Expose ports.
-EXPOSE 80
-EXPOSE 443
