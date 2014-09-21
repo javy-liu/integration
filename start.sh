@@ -6,7 +6,7 @@
 
 
 # 
-if [ ! -f /var/www/sites/default/settings.php ]; then
+if [ ! -f /var/www/sites/setting.conf ]; then
 	# Config Mysql
 	NEBULA_DB="nebula"
     MYSQL_PASSWORD="root"

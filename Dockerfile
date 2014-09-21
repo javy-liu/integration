@@ -36,16 +36,29 @@ RUN \
   cp -f src/redis-sentinel /usr/local/bin && \
   mkdir -p /etc/redis && \
   cp -f *.conf /etc/redis && \
-  rm -rf /tmp/redis-stable*
+  rm -rf /tmp/redis-stable* && \
+  sed -i 's/^\(bind .*\)$/# \1/' /etc/redis/redis.conf && \
+  sed -i 's/^\(daemonize .*\)$/# \1/' /etc/redis/redis.conf && \
+  sed -i 's/^\(dir .*\)$/# \1\ndir \/data/' /etc/redis/redis.conf && \
+  sed -i 's/^\(logfile .*\)$/# \1/' /etc/redis/redis.conf
+
+# Install MySQL.
+RUN \
+  sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
+  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf
 
 RUN \
-  	cd /tmp && \
+  cd /tmp && \
 	wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-8/v8.0.12/bin/apache-tomcat-8.0.12.tar.gz && \
 	tar xvzf apache-tomcat-8.0.12.tar.gz && \
 	rm apache-tomcat-8.0.12.tar.gz && \
-	mv apache-tomcat-8.0.12 ${CATALINA_HOME} && \
-	rm -rf /usr/local/tomcat/webapps/*
-  
+	mv apache-tomcat-8.0.12 ${CATALINA_HOME}
+ 
+# Config Nginx.
+RUN \
+  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
+  chown -R www-data:www-data /var/lib/nginx
+
 # Define mountable directories.
 VOLUME ["/data", "/etc/mysql", "/var/lib/mysql", "/usr/local/tomcat/webapps", "/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
 
