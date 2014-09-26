@@ -14,10 +14,6 @@ ENV HOME /root
 ENV CATALINA_HOME /next/tomcat
 
 RUN \
-  mkdir /next && \
-  chmod 777 /next
-
-RUN \
   echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   add-apt-repository -y ppa:webupd8team/java && \
   add-apt-repository -y ppa:nginx/stable && \
