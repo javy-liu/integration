@@ -60,6 +60,14 @@ RUN \
   sed -i 's/\/etc\/nginx\/sites-enabled/\/next\/nginx\/sites-enabled/g' /etc/nginx/nginx.conf && \
   chown -R www-data:www-data /var/lib/nginx
 
+RUN \
+  apt-get update && \
+  apt-get install -y openssh-server && \
+  mkdir /var/run/sshd && \
+  echo 'root:root' |chpasswd && \
+  sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config  && \
+  sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+
 # Define mountable directories.
 VOLUME ["/data", "/etc/mysql", "/var/lib/mysql", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
 
@@ -76,3 +84,4 @@ CMD /usr/local/bin/supervisord -n
 # Expose ports.
 EXPOSE 80
 EXPOSE 443
+EXPOSE 22

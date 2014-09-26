@@ -1,6 +1,6 @@
 # 集成环境
 
-环境中包括Redis、Mysql、Tomcat、Nginx。
+环境中包括Redis、Mysql、Tomcat、Nginx、ssh。
 
 ### 启动运行
 
