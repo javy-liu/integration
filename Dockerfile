@@ -14,6 +14,10 @@ ENV HOME /root
 ENV CATALINA_HOME /next/tomcat
 
 RUN \
+  mkdir /next && \
+  chmod 777 /next
+
+RUN \
   echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
   add-apt-repository -y ppa:webupd8team/java && \
   add-apt-repository -y ppa:nginx/stable && \
@@ -29,13 +33,10 @@ RUN \
   make && \
   make install && \
   cp -f src/redis-sentinel /usr/local/bin && \
-  mkdir -p /next/redis && \
-  cp -f *.conf /next/redis && \
-  rm -rf /tmp/redis-stable* && \
-  sed -i 's/^\(bind .*\)$/# \1/' /next/redis/redis.conf && \
-  sed -i 's/^\(daemonize .*\)$/# \1/' /next/redis/redis.conf && \
-  sed -i 's/^\(dir .*\)$/# \1\ndir \/next\/redis\/data/' /next/redis/redis.conf && \
-  sed -i 's/^\(logfile .*\)$/# \1/' /next/redis/redis.conf
+  mkdir -p /etc/redis && \
+  cp -f *.conf /etc/redis && \
+  rm -rf /tmp/redis-stable*
+  
 
 # Install MySQL.
 RUN \
@@ -43,36 +44,24 @@ RUN \
   DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && \
   rm -rf /var/lib/apt/lists/* && \
   sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
-  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf && \
-  mkdir -p /next/mysql/ && \
-  mv /etc/mysql/my.cnf /next/mysql/my.cnf && \
-  echo "mysqld_safe &" > /tmp/config && \
-  echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config && \
-  echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
-  bash /tmp/config && \
-  rm -f /tmp/config
+  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf
+  
 
 RUN \
   cd /tmp && \
 wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-8/v8.0.12/bin/apache-tomcat-8.0.12.tar.gz && \
 tar xvzf apache-tomcat-8.0.12.tar.gz && \
 rm apache-tomcat-8.0.12.tar.gz && \
-mv apache-tomcat-8.0.12 ${CATALINA_HOME}
+mv apache-tomcat-8.0.12 /usr/local/
  
 # Config Nginx.
 RUN \
   echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
   sed -i 's/\/etc\/nginx\/sites-enabled/\/next\/nginx\/sites-enabled/g' /etc/nginx/nginx.conf && \
-  mkdir -p /next/nginx && \
-  cp /etc/nginx/nginx.conf /next/nginx/nginx.conf && \
-  cp -ar /etc/nginx/sites-enabled/ /next/nginx/ && \
   chown -R www-data:www-data /var/lib/nginx
 
 # Define mountable directories.
-VOLUME ["/next", "/etc/mysql", "/var/lib/mysql", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
-
-ADD ./start.sh /start.sh
-RUN chmod 755 /start.sh
+VOLUME ["/data", "/etc/mysql", "/var/lib/mysql", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
 
 # Supervisor Config
 RUN /usr/bin/easy_install supervisor
@@ -82,7 +71,7 @@ ADD ./supervisord.conf /etc/supervisord.conf
 WORKDIR /root
 
 # Define default command.
-CMD ["/start.sh"]
+CMD /usr/local/bin/supervisord -n
 
 # Expose ports.
 EXPOSE 80
