@@ -22,8 +22,10 @@ RUN \
 # config tomcat
 RUN \
   rm -rf /usr/local/apache-tomcat-8.0.12/webapps/**
-  
-ADD build/libs/*.war /usr/local/apache-tomcat-8.0.12/webapps/ROOT.war
 
 # config nginx.
 
+ADD ./start.sh /start.sh
+RUN chmod 755 /start.sh
+
+CMD /start.sh

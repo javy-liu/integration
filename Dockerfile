@@ -1,7 +1,7 @@
 #
 # intergration
 #
-# https://github.com/excalibur/intergration
+# https://github.com/excalibur/integration
 #
 
 # Pull base image.
@@ -11,7 +11,7 @@ MAINTAINER lzy7750015@gmail.com
 
 # Set environment variables.
 ENV HOME /root
-ENV CATALINA_HOME /next/tomcat
+ENV CATALINA_HOME /usr/local/tomcat
 
 RUN \
   echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections && \
@@ -40,20 +40,23 @@ RUN \
   DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server && \
   rm -rf /var/lib/apt/lists/* && \
   sed -i 's/^\(bind-address\s.*\)/# \1/' /etc/mysql/my.cnf && \
-  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf
-  
+  sed -i 's/^\(log_error\s.*\)/# \1/' /etc/mysql/my.cnf && \
+  echo "mysqld_safe &" > /tmp/config && \
+  echo "mysqladmin --silent --wait=30 ping || exit 1" >> /tmp/config && \
+  echo "mysql -e 'GRANT ALL PRIVILEGES ON *.* TO \"root\"@\"%\" WITH GRANT OPTION;'" >> /tmp/config && \
+  bash /tmp/config && \
+  rm -f /tmp/config
 
 RUN \
   cd /tmp && \
 wget http://mirrors.hust.edu.cn/apache/tomcat/tomcat-8/v8.0.12/bin/apache-tomcat-8.0.12.tar.gz && \
 tar xvzf apache-tomcat-8.0.12.tar.gz && \
 rm apache-tomcat-8.0.12.tar.gz && \
-mv apache-tomcat-8.0.12 /usr/local/
+mv apache-tomcat-8.0.12 ${CATALINA_HOME}
  
 # Config Nginx.
 RUN \
   echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  sed -i 's/\/etc\/nginx\/sites-enabled/\/next\/nginx\/sites-enabled/g' /etc/nginx/nginx.conf && \
   chown -R www-data:www-data /var/lib/nginx
 
 RUN \
@@ -65,7 +68,7 @@ RUN \
   sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
 
 # Define mountable directories.
-VOLUME ["/data", "/etc/mysql", "/var/lib/mysql", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx"]
+VOLUME ["/data", "/etc/mysql", "/var/lib/mysql", "/etc/nginx/sites-enabled,"/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/usr/local/tomcat"]
 
 # Supervisor Config
 RUN /usr/bin/easy_install supervisor
