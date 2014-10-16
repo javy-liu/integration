@@ -1,6 +1,6 @@
 
 # Pull base image.
-FROM ubuntu:14.04
+FROM excalibur/ssh
 
 MAINTAINER lzy7750015@gmail.com
 

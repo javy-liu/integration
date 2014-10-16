@@ -1,6 +1,6 @@
 
 # Pull base image.
-FROM excalibur/ubuntu
+FROM dockerfile/ubuntu
 
 MAINTAINER lzy7750015@gmail.com
 
