@@ -28,7 +28,9 @@ RUN \
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/envinject.hpi && \
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/parameterized-trigger.hpi && \
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/token-macro.hpi && \
-	wget --no-check-certificate http://updates.jenkins-ci.org/latest/build-name-setter.hpi 	
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/build-name-setter.hpi && \	
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/publish-over-ssh.hpi && \	
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/deploy.hpi && \	
 
 
 EXPOSE 8080

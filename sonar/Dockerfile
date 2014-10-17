@@ -14,8 +14,6 @@ ENV SONAR_HOME /usr/local/nexus
 RUN \
   wget -O /tmp/sonar-latest.zip http://dist.sonar.codehaus.org/sonarqube-4.5.zip && \
   unzip /tmp/sonar-latest.zip -d /usr/local && \
-  useradd --user-group --system sonar && \
-  chown -R sonar:sonar /usr/local/sonarqube-* && \
   ln -s /usr/local/sonarqube-* /usr/local/sonar && \
   rm -rf /tmp/sonar-latest.zip && \
   sed -i 's/^#\(sonar.jdbc.url\)=\(jdbc:mysql:\S*\)/\1=${env:SONAR_JDBC_URL}\n#\1=\2/' /usr/local/sonar/conf/sonar.properties && \
