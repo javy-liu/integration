@@ -9,6 +9,7 @@ ENV SONAR_USER sonar
 ENV SONAR_PASSWORD sonar
 ENV SONAR_LOG_LEVEL DEBUG
 ENV	SONAR_WEB_CONTEXT /
+ENV SONAR_HOME /usr/local/nexus
 
 RUN \
   wget -O /tmp/sonar-latest.zip http://dist.sonar.codehaus.org/sonarqube-4.5.zip && \

@@ -4,6 +4,8 @@ FROM dockerfile/java:oracle-java8
 
 MAINTAINER lzy7750015@gmail.com
 
+ENV NEXUS_HOME /usr/local/nexus
+
 RUN \
   wget -O /tmp/nexus-latest-bundle.tar.gz http://www.sonatype.org/downloads/nexus-2.10.0-02-bundle.tar.gz && \
   tar xzvf /tmp/nexus-latest-bundle.tar.gz -C /usr/local && \
@@ -12,6 +14,8 @@ RUN \
   ln -s /usr/local/nexus-* /usr/local/nexus
 
 VOLUME ["/usr/local/nexus", "/usr/local/sonatype-work"]
+
+WORKDIR /usr/local/nexus
 
 CMD /usr/local/nexus/bin/nexus console
 
