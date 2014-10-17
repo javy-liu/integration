@@ -19,7 +19,8 @@ RUN \
   rm -rf /tmp/sonar-latest.zip && \
   sed -i 's/^#\(sonar.jdbc.url\)=\(jdbc:mysql:\S*\)/\1=${env:SONAR_JDBC_URL}\n#\1=\2/' /usr/local/sonar/conf/sonar.properties && \
   sed -i 's/^#\(sonar.jdbc.username\)=sonar/\1=${env:SONAR_USER}/' /usr/local/sonar/conf/sonar.properties && \
-  sed -i 's/^#\(sonar.jdbc.password\)=sonar/\1=${env:SONAR_PASSWORD}/' /usr/local/sonar/conf/sonar.properties
+  sed -i 's/^#\(sonar.jdbc.password\)=sonar/\1=${env:SONAR_PASSWORD}/' /usr/local/sonar/conf/sonar.properties && \
+  sed -i 's/^#\(sonar.web.context\)=/\1=${env:SONAR_WEB_CONTEXT}/' /usr/local/sonar/conf/sonar.properties
 
 VOLUME ["/usr/local/sonar"]
 
