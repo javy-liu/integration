@@ -21,8 +21,6 @@ RUN \
   sed -i 's/^#\(sonar.jdbc.username\)=sonar/\1=${env:SONAR_USER}/' /usr/local/sonar/conf/sonar.properties && \
   sed -i 's/^#\(sonar.jdbc.password\)=sonar/\1=${env:SONAR_PASSWORD}/' /usr/local/sonar/conf/sonar.properties
 
-USER sonar
-
 VOLUME ["/usr/local/sonar"]
 
 CMD ["/usr/local/sonar/bin/linux-x86-64/sonar.sh","console"]
