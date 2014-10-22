@@ -30,7 +30,11 @@ RUN \
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/token-macro.hpi && \
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/build-name-setter.hpi && \	
 	wget --no-check-certificate http://updates.jenkins-ci.org/latest/publish-over-ssh.hpi && \	
-	wget --no-check-certificate http://updates.jenkins-ci.org/latest/deploy.hpi && \	
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/deploy.hpi && \		
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/disk-usage.hpi && \	
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/thinBackup.hpi && \
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/email-ext.hpi && \
+	wget --no-check-certificate http://updates.jenkins-ci.org/latest/sidebar-link.hpi
 
 
 EXPOSE 8080
