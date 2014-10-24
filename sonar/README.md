@@ -2,9 +2,15 @@
 
 docker打包的sonar环境
 
-# 运行方式
+## 运行方式
 
-依赖与一个外部mysql
+### 简单运行
+
+	docker run -d -p 9000:9000 -p 3306:3306 --name sonar sonar
+
+### 使用外部数据库
+
+外部mysql
 
 	docker run -d --name sonar-mysql -e MYSQL_ROOT_PASSWORD=root mysql
 
@@ -14,4 +20,4 @@ docker打包的sonar环境
 
 然后运行sonar
 
-	docker run -d --name sonar --link sonar-mysql:mysql -e SONAR_WEB_CONTEXT=/sonar sonar
+	docker run -d --name sonar --link sonar-mysql:mysql -e SONAR_WEB_CONTEXT=/ -e SONAR_JDBC_URL jdbc:mysql://mysql:3306/sonar?useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true sonar sonar
