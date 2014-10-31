@@ -17,13 +17,13 @@ RUN \
 
 VOLUME ["/usr/local/nexus", "/usr/local/sonatype-work"]
 
-USER nexus
-
 WORKDIR /usr/local/nexus
 
 # Add start script 
 ADD ./start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
+
+USER nexus
 
 # Define default command.
 CMD /usr/local/bin/start.sh
