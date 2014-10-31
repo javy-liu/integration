@@ -12,8 +12,8 @@ RUN \
   tar xzvf /tmp/nexus-latest-bundle.tar.gz -C /usr/local && \
   useradd --user-group --system nexus && \
   chown -R nexus:nexus /usr/local/nexus-* /usr/local/sonatype-work && \
-  ln -s /usr/local/nexus-* /usr/local/nexus && \
-  sed -i 's/^\(nexus-webapp-context-path\)=\(\\nexus\S*\)/\1=${env:NEXUS_WEB_CONTEXT}/' /usr/local/nexus/conf/nexus.properties
+  ln -s /usr/local/nexus-* /usr/local/nexus
+  
 
 VOLUME ["/usr/local/nexus", "/usr/local/sonatype-work"]
 
@@ -21,6 +21,11 @@ USER nexus
 
 WORKDIR /usr/local/nexus
 
-CMD /usr/local/nexus/bin/nexus console
+# Add start script 
+ADD ./start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Define default command.
+CMD /usr/local/bin/start.sh
 
 EXPOSE 8081
