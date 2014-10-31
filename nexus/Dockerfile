@@ -23,6 +23,8 @@ WORKDIR /usr/local/nexus
 ADD ./start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
 
+USER nexus
+
 # Define default command.
 CMD /usr/local/bin/start.sh
 
